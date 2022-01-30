@@ -13,6 +13,7 @@ public class MovePlayer : MonoBehaviour {
 
 	private Rigidbody rb;
 	private int count;
+	private bool cubeSound = false;
 
 	//************* Need to setup this server dictionary...
 	Dictionary<string, ServerLog> servers = new Dictionary<string, ServerLog> ();
@@ -26,14 +27,31 @@ public class MovePlayer : MonoBehaviour {
 		//************* Instantiate the OSC Handler...
 	    OSCHandler.Instance.Init ();
 		OSCHandler.Instance.SendMessageToClient ("pd", "/unity/trigger", "ready");
-        OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 1);
+        //OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 1);
         //*************
 
         rb = GetComponent<Rigidbody> ();
 		count = 0;
 		setCountText ();
 	}
-	
+
+	void Update() 
+	{
+		if (cubeSound == false) { 
+			if (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s") || Input.GetKey("d"))
+			{
+				OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 1);
+			}
+			else 
+			{
+				OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0);
+			}
+		}
+		else
+		{
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0);
+		}
+	}
 
 	void FixedUpdate()
 	{
@@ -79,12 +97,12 @@ public class MovePlayer : MonoBehaviour {
 
         if (other.gameObject.CompareTag ("Pick Up")) 
 		{
+			cubeSound = true;
 			other.gameObject.SetActive (false);
 			count = count + 1;
 			setCountText ();
 
-
-            // change the tempo of the sequence based on how many obejcts we have picked up.
+			/*// change the tempo of the sequence based on how many obejcts we have picked up.
             if(count < 2)
             {
                 OSCHandler.Instance.SendMessageToClient("pd", "/unity/tempo", 500);
@@ -105,8 +123,8 @@ public class MovePlayer : MonoBehaviour {
             {
                 OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0);
             }
-
-        }
+			*/
+		}
         else if(other.gameObject.CompareTag("Walls"))
         {
             Debug.Log("-------- HIT THE WALL ----------");
