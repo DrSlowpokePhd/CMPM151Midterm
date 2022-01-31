@@ -14,6 +14,7 @@ public class MovePlayer : MonoBehaviour {
 	private Rigidbody rb;
 	private int count;
 	private bool cubeSound = false;
+	private float cubeSFXTime = 0;
 
 	//************* Need to setup this server dictionary...
 	Dictionary<string, ServerLog> servers = new Dictionary<string, ServerLog> ();
@@ -37,15 +38,17 @@ public class MovePlayer : MonoBehaviour {
 
 	void Update() 
 	{
-		if (cubeSound == false) { 
-			if (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s") || Input.GetKey("d"))
-			{
-				OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 1);
-			}
-			else 
-			{
-				OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0);
-			}
+		// update cubeSFXTime
+		if (cubeSFXTime > 0) {
+			cubeSFXTime -= Time.deltaTime;
+		}
+		
+		if (cubeSFXTime < 0) {
+			cubeSFXTime = 0f;
+		}
+
+		if (cubeSFXTime <= 0 && (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s") || Input.GetKey("d"))) { 
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 1);
 		}
 		else
 		{
@@ -98,6 +101,7 @@ public class MovePlayer : MonoBehaviour {
         if (other.gameObject.CompareTag ("Pick Up")) 
 		{
 			cubeSound = true;
+			cubeSFXTime = 3.9f;
 			other.gameObject.SetActive (false);
 			count = count + 1;
 			setCountText ();
@@ -139,7 +143,7 @@ public class MovePlayer : MonoBehaviour {
 		countText.text = "Count: " + count.ToString ();
 
 		//************* Send the message to the client...
-		OSCHandler.Instance.SendMessageToClient ("pd", "/unity/trigger", count);
+		OSCHandler.Instance.SendMessageToClient ("pd", "/unity/trigger", 1);
 		//*************
 	}
 		
