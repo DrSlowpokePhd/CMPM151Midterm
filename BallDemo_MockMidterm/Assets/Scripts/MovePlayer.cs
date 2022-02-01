@@ -55,7 +55,7 @@ public class MovePlayer : MonoBehaviour {
 			OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0);
 		}
 
-		checkClose();
+		checkEnd();
 	}
 
 	void FixedUpdate()
@@ -149,22 +149,28 @@ public class MovePlayer : MonoBehaviour {
 		//*************
 	}
 
-	void checkClose()
+	void checkEnd()
 	{
 		// get position of the player
 		float x = transform.position.x;
 		float z = transform.position.z;
-
-		//increase the temp as the player gets closer 
-		var temp = 0.5; 
 		
 		// check if player is close to exit
 		if(z < 5f && x < -5.5f)
 		{
-			OSCHandler.Instance.SendMessageToClient("pd", "/unity/end", 2);
+            OSCHandler.Instance.SendMessageToClient("pd", "/unity/tempo", 100);
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/end", 1);
+
+			if((x > -11f && (x < -6)) && ((z < -5f) && (z > -11f)))
+			{
+				OSCHandler.Instance.SendMessageToClient("pd", "/unity/tempo", 300);
+				OSCHandler.Instance.SendMessageToClient("pd", "/unity/end", 1);
+				Debug.Log("here");
+			}
+		
 		} else
 		{
-			OSCHandler.Instance.SendMessageToClient("pd", "/unity/end", 1);
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/end", 0);
 		}
 	}
 		

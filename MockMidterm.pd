@@ -6,7 +6,7 @@
 #X text 164 87 3 Set OSC Addresses (routing osc data;
 #X text 155 26 Key Settings;
 #X floatatom 43 194 5 0 0 0 - - -;
-#N canvas 3 97 1280 659 oscReceive 1;
+#N canvas 0 25 1280 659 oscReceive 1;
 #X obj 55 184 netreceive -u -b;
 #X msg 78 143 listen 0;
 #X text 152 143 stop listening;
@@ -60,7 +60,7 @@
 #X connect 26 0 28 0;
 #X connect 27 0 26 0;
 #X restore 47 142 pd oscReceive;
-#X obj 47 36 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+#X obj 47 36 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X msg 47 61 \; pd dsp \$1;
 #X obj 455 225 r osctrig;
@@ -336,7 +336,6 @@
 #X obj 2420 863 tabwrite~ distance_array;
 #X obj 2054 340 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1
 0 1;
-#X floatatom 2114 338 5 0 0 0 - - -;
 #X obj 2054 498 f;
 #X obj 2100 517 + 1;
 #X obj 2054 844 *~;
@@ -360,9 +359,11 @@
 #X obj 2054 422 metro 700;
 #X text 1313 188 Sequence playback: tempo increases as more cubes are
 collected.;
-#X text 2046 223 Close to end: tempo increases as player approaches
-the end.;
 #X obj 2054 276 r oscend;
+#X obj 2114 316 r osctempo;
+#X floatatom 2114 346 5 0 0 0 - - -;
+#X text 2046 223 End Goal: a new sound triggers as players approach
+the exit of the game.;
 #X connect 6 0 11 0;
 #X connect 8 0 9 0;
 #X connect 10 0 102 0;
@@ -579,36 +580,37 @@ the end.;
 #X connect 182 0 186 0;
 #X connect 183 0 182 0;
 #X connect 185 0 183 0;
-#X connect 187 0 202 0;
-#X connect 187 0 209 0;
-#X connect 188 0 203 0;
-#X connect 189 0 190 0;
-#X connect 189 0 193 0;
-#X connect 190 0 189 1;
-#X connect 191 0 192 0;
-#X connect 191 0 192 1;
-#X connect 191 0 186 0;
-#X connect 193 0 194 0;
-#X connect 194 0 199 0;
-#X connect 194 1 200 0;
-#X connect 194 1 201 0;
-#X connect 195 0 191 1;
-#X connect 195 0 196 1;
-#X connect 196 0 191 1;
-#X connect 197 0 191 0;
+#X connect 187 0 201 0;
+#X connect 187 0 208 0;
+#X connect 188 0 189 0;
+#X connect 188 0 192 0;
+#X connect 189 0 188 1;
+#X connect 190 0 191 0;
+#X connect 190 0 191 1;
+#X connect 190 0 186 0;
+#X connect 192 0 193 0;
+#X connect 193 0 198 0;
+#X connect 193 1 199 0;
+#X connect 193 1 200 0;
+#X connect 194 0 190 1;
+#X connect 194 0 195 1;
+#X connect 195 0 190 1;
+#X connect 196 0 190 0;
+#X connect 197 0 195 0;
 #X connect 198 0 196 0;
-#X connect 199 0 197 0;
+#X connect 199 0 196 0;
 #X connect 200 0 197 0;
-#X connect 201 0 198 0;
-#X connect 202 0 189 0;
-#X connect 203 0 209 1;
-#X connect 204 0 195 0;
-#X connect 205 0 201 0;
-#X connect 206 0 207 0;
-#X connect 206 0 208 0;
-#X connect 206 0 205 0;
+#X connect 201 0 188 0;
+#X connect 202 0 208 1;
+#X connect 203 0 194 0;
+#X connect 204 0 200 0;
+#X connect 205 0 206 0;
+#X connect 205 0 207 0;
+#X connect 205 0 204 0;
+#X connect 206 0 198 0;
 #X connect 207 0 199 0;
-#X connect 208 0 200 0;
-#X connect 209 0 189 0;
-#X connect 209 0 204 0;
-#X connect 212 0 187 0;
+#X connect 208 0 188 0;
+#X connect 208 0 203 0;
+#X connect 210 0 187 0;
+#X connect 211 0 212 0;
+#X connect 212 0 202 0;
