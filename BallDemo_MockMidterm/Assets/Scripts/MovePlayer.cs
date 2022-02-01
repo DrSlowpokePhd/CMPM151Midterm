@@ -28,7 +28,7 @@ public class MovePlayer : MonoBehaviour {
 		//************* Instantiate the OSC Handler...
 	    OSCHandler.Instance.Init ();
 		OSCHandler.Instance.SendMessageToClient ("pd", "/unity/trigger", "ready");
-        //OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 1);
+		OSCHandler.Instance.SendMessageToClient ("pd", "/unity/playseq", "ready");
         //*************
 
         rb = GetComponent<Rigidbody> ();
@@ -54,6 +54,8 @@ public class MovePlayer : MonoBehaviour {
 		{
 			OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0);
 		}
+
+		checkClose();
 	}
 
 	void FixedUpdate()
@@ -129,7 +131,7 @@ public class MovePlayer : MonoBehaviour {
             }
 			*/
 		}
-        else if(other.gameObject.CompareTag("Walls"))
+        else if(other.gameObject.CompareTag("Wall"))
         {
             Debug.Log("-------- HIT THE WALL ----------");
             // trigger noise burst whe hitting a wall.
@@ -145,6 +147,25 @@ public class MovePlayer : MonoBehaviour {
 		//************* Send the message to the client...
 		OSCHandler.Instance.SendMessageToClient ("pd", "/unity/trigger", 1);
 		//*************
+	}
+
+	void checkClose()
+	{
+		// get position of the player
+		float x = transform.position.x;
+		float z = transform.position.z;
+
+		//increase the temp as the player gets closer 
+		var temp = 0.5; 
+		
+		// check if player is close to exit
+		if(z < 5f && x < -5.5f)
+		{
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/end", 2);
+		} else
+		{
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/end", 1);
+		}
 	}
 		
 }
